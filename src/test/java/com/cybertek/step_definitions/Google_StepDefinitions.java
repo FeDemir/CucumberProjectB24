@@ -7,6 +7,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class Google_StepDefinitions {
 
@@ -14,6 +17,7 @@ public class Google_StepDefinitions {
     public void user_is_on_google_home_page() {
 
         Driver.getDriver().get("https://www.google.com");
+
 
     }
 
@@ -34,5 +38,37 @@ public class Google_StepDefinitions {
 
         Assert.assertTrue(actualTitle.contains(expectedInTitle));
 
+    }
+
+
+    @Then("User should be able to search for following:")
+    public void userShouldBeAbleToSearchForFollowing(List<String> keywords) {
+        System.out.println("keywords = " + keywords);
+        GoogleSearchPage page = new GoogleSearchPage();
+
+        for (String keyword:keywords) {
+            page.searchBar.click();
+            page.searchBar.clear();
+            page.searchBar.sendKeys(keyword);
+            page.searchBar.submit();
+            String actualTitle = Driver.getDriver().getTitle();
+            String expectedInTitle = keyword;
+            System.out.println("actualTitle = " + actualTitle);
+            Assert.assertTrue(actualTitle.contains(expectedInTitle));
+        }
+    }
+    @When("User searches for {string} capital")
+    public void user_searches_for_capital(String countryName) {
+        // Write code here that turns the phrase above into concrete actions
+        GoogleSearchPage page = new GoogleSearchPage();
+        page.searchBar.sendKeys("what is capital city of " + countryName + Keys.ENTER);
+    }
+    @Then("User should see {string} in the result")
+    public void user_should_see_in_the_result(String capitalCity) {
+        // Write code here that turns the phrase above into concrete actions
+        System.out.println("Expected Capital City name: " + capitalCity);
+        GoogleSearchPage page = new GoogleSearchPage();
+        System.out.println("page.capitolTitle.getText() = " + page.capitolTitle.getText());
+        Assert.assertEquals("Result is not confirmed",capitalCity,page.capitolTitle.getText());
     }
 }
