@@ -11,11 +11,11 @@ import org.junit.runner.RunWith;
                 "html:target/cucumber-report.html",
                 "rerun:target/rerun.txt",//this will store failed scenarios into rerun.txt file
                 "json:target/cucumber.json"
-        },
-        features = "src/test/resources/features",
-        glue = "com/cybertek/step_definitions",
-        dryRun = false
-        //,tags = "@interview"
+        }
+        ,features = "src/test/resources/features"
+        ,glue = "com/cybertek/step_definitions"
+        ,dryRun = false
+        //,tags = "@smoke"
 )
 public class CukesRunner {
 }
