@@ -1,4 +1,4 @@
-@google
+@google @smoke
 Feature: Passing multiple parameters to the step
   @Google
   Scenario:
