@@ -4,14 +4,14 @@ import com.cybertek.pages.AddSpartanPage;
 import com.cybertek.pages.SpartanDetailPage;
 import com.cybertek.pages.SpartanHomePage;
 import com.cybertek.pages.SpartanWebDataPage;
-import com.cybertek.utilities.BrowserUtils;
 import com.cybertek.utilities.ConfigurationReader;
+import com.cybertek.utilities.DB_Util;
 import com.cybertek.utilities.Driver;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class Spartan_StepDefinitions {
     WebDriver driver = Driver.getDriver();
     SpartanWebDataPage dataPage = new SpartanWebDataPage();
-    Map<String,String> addDataDetails;
+    Map<String,String> spartanMap;
     @Given("User is on spartan home page")
     public void user_is_on_spartan_home_page() {
         driver.get(ConfigurationReader.getProperty("spartan.url"));
@@ -35,7 +35,7 @@ public class Spartan_StepDefinitions {
     }
     @When("enters following data and submits:")
     public void enters_following_data_and_submits(Map<String,String> data) {
-        addDataDetails=data;
+        spartanMap =data;
         AddSpartanPage addPage = new AddSpartanPage();
         addPage.nameInput.sendKeys(data.get("name"));
         addPage.phoneInput.sendKeys(data.get("phone"));
@@ -50,13 +50,23 @@ public class Spartan_StepDefinitions {
     }
     @Then("data on confirmation page must be same")
     public void data_on_confirmation_page_must_be_same() {
-        SpartanWebDataPage dataPage = new SpartanWebDataPage();
-        dataPage.nameInput.sendKeys(addDataDetails.get("name"));
-        dataPage.searchBtn.click();
-        //BrowserUtils.sleep(5);
-        Assert.assertTrue(dataPage.findData(addDataDetails.get("name")));
-        Assert.assertTrue(dataPage.findData(addDataDetails.get("phone")));
-        Assert.assertTrue(dataPage.findData(addDataDetails.get("gender")));
-    }
 
+        Assert.assertTrue(dataPage.verifyData(spartanMap.get("name"), spartanMap.get("phone"), spartanMap.get("gender")));
+
+    }
+    
+    @And("data in database must be match")
+    public void dataInDatabaseMustBeMatch() {
+        DB_Util.runQuery("select * from SPARTANS where NAME='Wooden Tester'");
+        System.out.println("Column Count = "+DB_Util.getColumnCount());
+        Map<String, String> dbMap = DB_Util.getRowMap(1);
+        System.out.println("dbMap = " + dbMap);
+        Assert.assertEquals(spartanMap.get("name"),dbMap.get("NAME"));
+        Assert.assertEquals(spartanMap.get("gender"),dbMap.get("GENDER"));
+        Assert.assertEquals(spartanMap.get("phone"),dbMap.get("PHONE"));
+
+        DB_Util.runQuery("Delete from SPARTANS where NAME='Wooden Tester'");
+
+        
+    }
 }

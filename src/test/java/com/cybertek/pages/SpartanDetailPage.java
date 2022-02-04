@@ -9,4 +9,15 @@ public class SpartanDetailPage extends BasePage{
 
     @FindBy (xpath = "//a[@href='/spartans']")
     public WebElement backToListLink;
+
+    @FindBy (id = "name")
+    public WebElement name;
+
+    @FindBy (id = "gender")
+    public WebElement gender;
+
+    @FindBy (id = "phone")
+    public WebElement phone;
+
+
 }
