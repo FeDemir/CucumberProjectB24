@@ -1,10 +1,12 @@
 package com.cybertek.step_definitions;
 
+import com.cybertek.utilities.DB_Util;
 import com.cybertek.utilities.Driver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 
+import org.junit.BeforeClass;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
@@ -19,6 +21,16 @@ public class Hooks {
         System.out.println("Before - setup method is running before the each scenario");
 
 
+    }
+
+    @Before("@db")
+    public void setUpDb() throws Exception {
+        DB_Util.createConnection();
+    }
+
+    @After("@db")
+    public void tearDownDb() throws Exception {
+        DB_Util.destroy();
     }
 
     @After

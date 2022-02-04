@@ -4,10 +4,11 @@ Feature: Login
 
   Scenario Outline: Login as a librarian
     Given I am on the login page
-    When I login as a librarian with <username> and <password>
+    When I login as a librarian with "<username>" and "<password>"
     Then dashboard should be displayed
     Examples:
-      |username  |password
+      |username             |password |
+      |librarian14@library  |Sdet2022*|
       
 
   Scenario: Login as a student
